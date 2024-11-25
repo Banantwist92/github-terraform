@@ -41,7 +41,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: 'Terraform destroy'
-        if: github.event.inputs.action_type == 'destory'
+        if: github.event.inputs.action_type == 'destroy'
         run: terraform destroy -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
@@ -71,7 +71,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: 'Terraform destroy'
-        if: github.event.inputs.action_type == 'destory'
+        if: github.event.inputs.action_type == 'destroy'
         run: terraform destroy -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
@@ -104,7 +104,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
       
       - name: 'Terraform destroy'
-        if: github.event.inputs.action_type == 'destory'
+        if: github.event.inputs.action_type == 'destroy'
         run: terraform destroy -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
