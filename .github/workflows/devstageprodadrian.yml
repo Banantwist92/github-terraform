@@ -5,6 +5,12 @@ on:
     paths:
       - '/M8/staticwebsite/**'
   workflow_dispatch:
+    inputs:
+      action_type:
+        description: 'What action should be performed? (apply/destroy)'
+        required: true
+        default: 'apply'
+
 
 env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -29,7 +35,14 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
       
       - name: Terraform apply dev
+        if: github.event.inputs.action_type == 'apply'
+        id: apply
         run: terraform apply -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: 'Terraform destroy'
+        if: github.event.inputs.action_type == 'destory'
+        run: terraform destroy -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test dev
@@ -52,7 +65,14 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
       
       - name: Terraform apply stage
+        if: github.event.inputs.action_type == 'apply'
+        id: apply
         run: terraform apply -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: 'Terraform destroy'
+        if: github.event.inputs.action_type == 'destory'
+        run: terraform destroy -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test stage
@@ -78,7 +98,14 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
       
       - name: Terraform apply prod
+        if: github.event.inputs.action_type == 'apply'
+        id: apply
         run: terraform apply -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}
+      
+      - name: 'Terraform destroy'
+        if: github.event.inputs.action_type == 'destory'
+        run: terraform destroy -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test prod
@@ -88,40 +115,4 @@ jobs:
       - name: Get Web Endpoint
         id: get_web_endpoint
         run: echo "WEB_ENDPOINT=$(terraform output -raw primary_web_endpoint)" 
-        working-directory: ${{ env.WORKING_DIR }}
-
-
-destroy:
-    needs: [dev_stage, stage_prod, prod]
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.1
-
-      - name: Terraform init
-        run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Terraform workspace select dev
-        run: terraform workspace select dev
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Terraform destroy dev
-        run: terraform destroy -auto-approve
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Terraform workspace select stage
-        run: terraform workspace select stage
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Terraform destroy stage
-        run: terraform destroy -auto-approve
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Terraform workspace select prod
-        run: terraform workspace select prod
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Terraform destroy prod
-        run: terraform destroy -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
