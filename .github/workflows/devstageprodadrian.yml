@@ -41,6 +41,8 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test dev
+        if: github.event.inputs.action_type == 'apply'
+        id: apply
         run: curl $(terraform output -raw primary_web_endpoint)
         working-directory: ${{ env.WORKING_DIR }}
 
@@ -71,6 +73,8 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test stage
+        if: github.event.inputs.action_type == 'apply'
+        id: apply
         run: curl $(terraform output -raw primary_web_endpoint)
         working-directory: ${{ env.WORKING_DIR }}
 
@@ -104,6 +108,8 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test prod
+        if: github.event.inputs.action_type == 'apply'
+        id: apply
         run: curl $(terraform output -raw primary_web_endpoint)
         working-directory: ${{ env.WORKING_DIR }}
 
