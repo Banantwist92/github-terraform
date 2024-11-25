@@ -63,7 +63,7 @@ jobs:
     needs: stage_prod
     runs-on: ubuntu-22.04
     environment: 
-      name: production
+      name: prod
       url: ${{ steps.get_web_endpoint.outputs.WEB_ENDPOINT }} # replace deploy_prod and web_url with actual output variables
     steps:
       - name: Checkout
