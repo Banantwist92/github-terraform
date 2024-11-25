@@ -36,13 +36,13 @@ jobs:
       
       - name: Terraform apply dev
         if: github.event.inputs.action_type == 'apply'
-        id: apply
+        id: apply_dev
         run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test dev
         if: github.event.inputs.action_type == 'apply'
-        id: apply
+        id: apply_dev_test
         run: curl $(terraform output -raw primary_web_endpoint)
         working-directory: ${{ env.WORKING_DIR }}
 
@@ -68,13 +68,13 @@ jobs:
       
       - name: Terraform apply stage
         if: github.event.inputs.action_type == 'apply'
-        id: apply
+        id: apply_stage
         run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test stage
         if: github.event.inputs.action_type == 'apply'
-        id: apply
+        id: apply_stage_test
         run: curl $(terraform output -raw primary_web_endpoint)
         working-directory: ${{ env.WORKING_DIR }}
 
@@ -103,13 +103,13 @@ jobs:
       
       - name: Terraform apply prod
         if: github.event.inputs.action_type == 'apply'
-        id: apply
+        id: apply_prod
         run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Test prod
         if: github.event.inputs.action_type == 'apply'
-        id: apply
+        id: apply_prod_test
         run: curl $(terraform output -raw primary_web_endpoint)
         working-directory: ${{ env.WORKING_DIR }}
 
